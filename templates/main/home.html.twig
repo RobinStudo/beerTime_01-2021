@@ -1,7 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
-Accueil
+    <div class="landing">
+        <div class="lading-content">
+            <h1>BeerTime</h1>
+            <h2>Des événements autours de la bière partout en France</h2>
+
+            <a href="{{ path('event_list') }}" class="btn btn-primary">Découvrir nos événéments</a>
+        </div>
+
+    </div>
+
+
+
+
 {% endblock %}

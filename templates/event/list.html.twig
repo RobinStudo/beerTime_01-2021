@@ -1,7 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventController!{% endblock %}
+{% block title %}Nos événements - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages/list.css') }}">
+{% endblock %}
 
 {% block body %}
-    Liste des événements
+    <div class="container mt-4">
+        <h1>Nos événéments</h1>
+
+        <div class="events">
+
+            {% for event in events %}
+                {% if event.endAt < date() %}
+                    {% set status = {color: 'danger', text: 'Passé'} %}
+                {% elseif event.startAt < date() %}
+                    {% set status = {color: 'warning', text: 'En cours'} %}
+                {% else %}
+                    {% set status = {color: 'primary', text: 'A venir'} %}
+                {% endif %}
+
+                <div class="card mb-3 event">
+                    <div class="row g-0">
+                        <div class="col-md-4 event-picture">
+                            <span class="event-timer badge rounded-pill bg-{{ status.color }}">
+                                {{ status.text }}
+                            </span>
+                            <img src="{{ event.picture }}" alt="Photo de {{ event.name }}" class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h2 class="card-title">{{ event.name }}</h2>
+                                <p class="card-text">{{ event.description }}</p>
+                                <p class="card-text event-info">
+                                    <span>
+                                        <i class="fas fa-euro-sign"></i>
+                                        {{ event.price ?? 'Gratuit' }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ event.place }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-clock"></i>
+                                        {{ event.startAt|date('d/m/Y H:i') }}
+                                    </span>
+                                    <span class="spacer"></span>
+                                    <a href="{{ path('event_display', {id: event.id}) }}" class="btn btn-primary">
+                                        En savoir plus
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
 {% endblock %}
