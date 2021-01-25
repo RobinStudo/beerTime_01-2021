@@ -42,6 +42,7 @@ class EventController extends AbstractController
 
         return $this->render('event/display.html.twig', array(
             'event' => $event,
+            'participantCounter' => $this->eventService->countParticipant( $event ),
         ));
     }
 

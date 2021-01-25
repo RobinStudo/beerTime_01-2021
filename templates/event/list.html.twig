@@ -12,6 +12,8 @@
 
         <div class="events">
 
+            <div class="mb-3">{{ events|length }} évènements disponibles</div>
+
             {% for event in events %}
                 {% if event.endAt < date() %}
                     {% set status = {color: 'danger', text: 'Passé'} %}
@@ -31,7 +33,15 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h2 class="card-title">{{ event.name }}</h2>
+                                <div class="card-title d-flex">
+                                    <h2>{{ event.name }}</h2>
+                                    <div class="d-flex align-items-center mx-1">
+                                        {% for category in event.categories %}
+                                            <i class="{{ category.icon }} mx-1" title="{{ category.name }}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
                                 <p class="card-text">{{ event.description }}</p>
                                 <p class="card-text event-info">
                                     <span>
@@ -40,7 +50,7 @@
                                     </span>
                                     <span>
                                         <i class="fas fa-map-marker-alt"></i>
-                                        {{ event.place }}
+                                        {{ event.place.name }} - {{ event.place.city }}
                                     </span>
                                     <span>
                                         <i class="fas fa-clock"></i>

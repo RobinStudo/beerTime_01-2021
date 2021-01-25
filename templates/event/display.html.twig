@@ -10,6 +10,12 @@
         </div>
         <div class="col-12 col-md-6">
             <h1>{{ event.name }}</h1>
+            <div>
+                {% for category in event.categories %}
+                    <i class="{{ category.icon }}" title="{{ category.name }}"></i>
+                {% endfor %}
+            </div>
+            <p>Organisé par {{ event.owner.username }}</p>
             <p>{{ event.description }}</p>
             <div class="d-flex justify-content-end">
                 <a href="{{ path('event_join', {id: event.id}) }}" class="btn btn-primary">S'inscrire</a>
@@ -22,7 +28,12 @@
             </span>
             <span>
                 <i class="fas fa-map-marker-alt"></i>
-                {{ event.place }}
+                {{ event.place.name }}<br>
+                {{ event.place.address }}<br>
+                {{ event.place.zipcode }} - {{ event.place.city }}<br>
+                {% if event.place.accessibility %}
+                    <p><i class="fa fa-wheelchair"></i> Accessible auxpersonnes à mobilité réduite</p>
+                {% endif %}
             </span>
             <span>
                 <i class="fas fa-clock"></i>
@@ -30,7 +41,11 @@
             </span>
             <span>
                 <i class="fas fa-users"></i>
-                Il reste {{ event.capacity }} places
+                {% if event.capacity != null %}
+                    Il reste {{ event.capacity - participantCounter }} places
+                {% else %}
+                    Il reste des places disponibles
+                {% endif %}
             </span>
         </div>
     </div>
