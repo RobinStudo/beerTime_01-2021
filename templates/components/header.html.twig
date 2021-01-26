@@ -14,6 +14,13 @@
                         <a class="nav-link" href="{{ path('event_create') }}">Créer un événement</a>
                     </li>
                 </ul>
+
+                <form method="get" action="{{ path('event_list') }}" class="d-flex ms-auto">
+                    <input type="search" name="q" class="form-control me-2" placeholder="Recherche ..." aria-label="Search" value="{{ query ?? "" }}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </nav>

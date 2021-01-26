@@ -14,9 +14,9 @@ class EventService{
         $this->participationRepository = $participationRepository;
     }
 
-    public function getAll()
+    public function buildResult($query)
     {
-      return $this->repository->findAll();
+        return $this->repository->search( $query );
     }
 
     public function getOne($id)

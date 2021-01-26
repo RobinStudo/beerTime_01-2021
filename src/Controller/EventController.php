@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,10 +23,14 @@ class EventController extends AbstractController
     /**
      * @Route("", name="list")
      */
-    public function list(): Response
+    public function list( Request $request ): Response
     {
+        $query = $request->query->get('q');
+
+        $events = $this->eventService->buildResult( $query );
         return $this->render('event/list.html.twig', array(
-            'events' => $this->eventService->getAll(),
+            'events' => $events,
+            'query' => $query,
         ));
     }
 
