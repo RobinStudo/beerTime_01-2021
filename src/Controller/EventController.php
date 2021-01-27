@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Event;
+use App\Form\EventType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +59,12 @@ class EventController extends AbstractController
      */
     public function create(): Response
     {
-        return $this->render('event/create.html.twig');
+        $event = new Event();
+        $form = $this->createForm( EventType::class, $event );
+
+        return $this->render('event/create.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
