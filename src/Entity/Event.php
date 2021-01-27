@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Event
 {
@@ -228,5 +230,13 @@ class Event
         $this->owner = $owner;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function initCreatedAt()
+    {
+        $this->setCreatedAt( new DateTime() );
     }
 }
