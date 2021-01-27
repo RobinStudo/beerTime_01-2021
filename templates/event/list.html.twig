@@ -14,6 +14,12 @@
 
             <div class="mb-3">{{ events|length }} évènements disponibles</div>
 
+            <div class="d-flex justify-content-end my-2">
+                <a href="{{ path('event_list', {sort: 'createdAt', q: query}) }}" class="btn btn-dark mx-1">Les plus récents</a>
+                <a href="{{ path('event_list', {sort: 'startAt', q: query}) }}" class="btn btn-dark mx-1">À venir</a>
+                <a href="{{ path('event_list', {sort: 'name', q: query}) }}" class="btn btn-dark mx-1">Par ordre alphabétique</a>
+            </div>
+
             {% for event in events %}
                 {% if event.endAt < date() %}
                     {% set status = {color: 'danger', text: 'Passé'} %}

@@ -12,7 +12,7 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function search( $query )
+    public function search( $query, $sort )
     {
         $stmt = $this->createQueryBuilder('e');
 
@@ -26,6 +26,17 @@ class EventRepository extends ServiceEntityRepository
             $stmt->orWhere('p.city LIKE :query');
 
             $stmt->setParameter('query', '%' . $query . '%');
+        }
+
+        switch ($sort){
+            case 'startAt':
+                $stmt->andWhere('e.endAt > CURRENT_TIMESTAMP()');
+            case 'name':
+                $stmt->orderBy('e.' . $sort, 'ASC');
+                break;
+            case 'createdAt':
+            default:
+                $stmt->orderBy('e.createdAt', 'DESC');
         }
 
         return $stmt->getQuery()->getResult();
