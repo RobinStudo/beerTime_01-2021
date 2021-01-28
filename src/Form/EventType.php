@@ -30,6 +30,7 @@ class EventType extends AbstractType
             ))
             ->add('startAt', null, array(
                 'label' => 'Date et heure de début',
+                'invalid_message' => 'La date de début n\'est pas valide',
                 'date_widget' => 'single_text',
                 'time_widget' => 'choice',
                 'minutes' => range(0, 45, 15),
@@ -39,6 +40,7 @@ class EventType extends AbstractType
             ))
             ->add('endAt', null, array(
                 'label' => 'Date et heure de fin',
+                'invalid_message' => 'La date de fin n\'est pas valide',
                 'date_widget' => 'single_text',
                 'time_widget' => 'choice',
                 'minutes' => range(0, 45, 15),
@@ -53,6 +55,7 @@ class EventType extends AbstractType
             ->add('price', null, array(
                 'label' => 'Prix',
                 'help' => 'Laisser vide pour les événements gratuits',
+                'invalid_message' => 'Le prix n\'est pas valide',
             ))
             ->add('capacity', null, array(
                 'label' => 'Capacité',
@@ -77,6 +80,9 @@ class EventType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Event::class,
+            'attr' => array(
+                'novalidate' => 'novalidate',
+            )
         ]);
     }
 }

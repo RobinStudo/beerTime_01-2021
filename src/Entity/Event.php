@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -22,36 +23,59 @@ class Event
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Vous devez saisir un nom")
+     * @Assert\Length(
+     *     min=5,
+     *     max=60,
+     *     minMessage="Le nom doit contenir au moins {{ limit }} caractères",
+     *     maxMessage="Le nom doit contenir au maximum {{ limit }} caractères"
+     * )
+     * @Assert\Regex("/^[0-9]+$/", match=false, message="Le nom doit contenir des lettres")
      * @ORM\Column(type="string", length=60)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message="Vous devez saisir une description")
+     * @Assert\Length(
+     *     min=20,
+     *     max=600,
+     *     minMessage="La description doit contenir au moins {{ limit }} caractères",
+     *     maxMessage="Le description doit contenir au maximum {{ limit }} caractères"
+     * )
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Assert\NotBlank(message="Vous devez saisir une date de début")
+     * @Assert\GreaterThan("today", message="Vous ne pouvez pas choisir une date antérieur")
      * @ORM\Column(type="datetime")
      */
     private $startAt;
 
     /**
+     * @Assert\NotBlank(message="Vous devez saisir une date de fin")
+     * @Assert\GreaterThan(propertyPath="startAt", message="Vous devez choisir une date de fin après la date de début")
      * @ORM\Column(type="datetime")
      */
     private $endAt;
 
     /**
+     * @Assert\NotBlank(message="Vous devez saisir l'URL d'une image")
+     * @Assert\Url(message="Vous devez saisir une URL valide")
      * @ORM\Column(type="string", length=255)
      */
     private $picture;
 
     /**
+     * @Assert\GreaterThanOrEqual(1, message="Le prix minimum est d'un euro")
      * @ORM\Column(type="float", nullable=true)
      */
     private $price;
 
     /**
+     * @Assert\GreaterThanOrEqual(5, message="Le capacité minimum est de {{ compared_value }}")
      * @ORM\Column(type="integer", nullable=true)
      */
     private $capacity;
@@ -62,6 +86,7 @@ class Event
     private $createdAt;
 
     /**
+     * @Assert\NotBlank(message="Vous devez choisir un lieu")
      * @ORM\ManyToOne(targetEntity=Place::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
