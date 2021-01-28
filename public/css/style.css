@@ -31,5 +31,11 @@ footer{
     margin-top: 30px;
 }
 
-
+.notifications{
+    position: fixed;
+    z-index: 2;
+    bottom: 5px;
+    right: 5px;
+    max-width: 250px;
+}
 
