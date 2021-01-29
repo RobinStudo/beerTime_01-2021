@@ -3,7 +3,7 @@
 {% block title %}Nos événements - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/pages/list.css') }}">
+    {{ encore_entry_link_tags('page_list') }}
 {% endblock %}
 
 {% block body %}
@@ -77,4 +77,8 @@
 
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('page_list') }}
 {% endblock %}

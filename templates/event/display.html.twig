@@ -18,7 +18,9 @@
             <p>Organisé par {{ event.owner.username }}</p>
             <p>{{ event.description }}</p>
             <div class="d-flex justify-content-end">
-                <a href="{{ path('event_join', {id: event.id}) }}" class="btn btn-primary">S'inscrire</a>
+                <button data-url="{{ path('event_join', {id: event.id}) }}" class="btn btn-primary" id="event_join" {{ hasParticipation ? 'disabled' : '' }}>
+                    {{ hasParticipation ? "Vous êtes déjà inscrit" : "S'inscrire" }}
+                </button>
             </div>
         </div>
         <div class="col-12 bg-secondary m-2 py-2 d-flex text-light justify-content-around">
@@ -50,4 +52,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('page_event') }}
 {% endblock %}

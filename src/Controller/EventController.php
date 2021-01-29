@@ -2,12 +2,14 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\User;
+use App\Entity\Participation;
 use App\Form\EventType;
+use App\Repository\ParticipationRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,7 +48,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="display", requirements={"id"="\d+"})
      */
-    public function display($id): Response
+    public function display(ParticipationRepository $participationRepository, $id): Response
     {
         $event = $this->eventService->getOne($id);
 
@@ -54,9 +56,20 @@ class EventController extends AbstractController
             throw new NotFoundHttpException("L'événement n'existe pas");
         }
 
+        if( $this->getUser() ){
+            $hasParticipation = $participationRepository->count(array(
+                'event' => $event,
+                'user' => $this->getUser(),
+            ));
+        }else{
+            $hasParticipation = 0;
+        }
+
+
         return $this->render('event/display.html.twig', array(
             'event' => $event,
             'participantCounter' => $this->eventService->countParticipant( $event ),
+            'hasParticipation' => $hasParticipation,
         ));
     }
 
@@ -88,10 +101,25 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/join", name="join", requirements={"id"="\d+"})
+     * @Route("/{id}/join", name="join", requirements={"id"="\d+"}, methods={"POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function join($id): Response
     {
-        return $this->render('event/join.html.twig');
+        $event = $this->eventService->getOne($id);
+        $user = $this->getUser();
+        $bookingNumber = bin2hex(random_bytes(12));
+
+        $participation = new Participation();
+        $participation->setEvent($event);
+        $participation->setUser($user);
+        $participation->setBookingNumber($bookingNumber);
+
+        $this->em->persist($participation);
+        $this->em->flush();
+
+        return new JsonResponse(array(
+            'status' => true
+        ));
     }
 }
