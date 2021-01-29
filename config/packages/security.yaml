@@ -3,7 +3,11 @@ security:
         App\Entity\User: bcrypt
 
     providers:
-        users_in_memory: { memory: null }
+        app_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,7 +15,14 @@ security:
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
+            provider: app_provider
+            form_login:
+                login_path: user_login
+                check_path: user_login
+                default_target_path: event_create
+            logout:
+                path: user_logout
+                target: event_list
 
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }

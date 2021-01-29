@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * @Route("", name="user_")
@@ -47,4 +48,27 @@ class UserController extends AbstractController
         ));
     }
 
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        if( $this->getUser() ){
+            return $this->redirectToRoute('main_home');
+        }
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+        if( $error ){
+            $this->addFlash('danger', 'Erreur lors de la connexion' );
+        }
+
+        return $this->render('user/login.html.twig', array(
+            'lastUsername' => $authenticationUtils->getLastUsername(),
+        ));
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout(){}
 }
