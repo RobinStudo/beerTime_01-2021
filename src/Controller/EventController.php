@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\EventService;
 
 /**
@@ -61,6 +62,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/create", name="create")
+     * @IsGranted("ROLE_USER")
      */
     public function create(Request $request, UserRepository $userRepository): Response
     {
@@ -69,8 +71,7 @@ class EventController extends AbstractController
 
         $form->handleRequest($request);
         if( $form->isSubmitted() && $form->isValid() ){
-            $user = $userRepository->find(1);
-            $event->setOwner($user);
+            $event->setOwner($this->getUser());
 
             $this->em->persist($event);
             $this->em->flush();
