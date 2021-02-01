@@ -25,7 +25,7 @@ class Participation
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=100)
      */
     private $bookingNumber;
 
