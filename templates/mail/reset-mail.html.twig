@@ -1,0 +1,9 @@
+<h1>Réinitialisation de mot de passe</h1>
+
+<p class="text-success">
+    Bonjour {{ user.username }}, <br><br>
+    Veuillez cliquer sur le lien ci-dessous pour changer votre mote de passe :
+    <a href="{{ absolute_url( path('user_reset_confirm', {token: user.token}) ) }}">Ici</a><br>
+
+    A bientôt
+</p>

@@ -29,6 +29,4 @@ security:
                 target: event_list
 
     access_control:
-        # - { path: ^/event/create$, roles: ROLE_USER }
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/admin, roles: ROLE_MANAGER }
